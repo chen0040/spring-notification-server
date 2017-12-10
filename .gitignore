@@ -7,10 +7,10 @@
 # BlueJ files
 *.ctxt
 
-spring-boot-application/*.iml
-spring-boot-application/.idea/
-spring-boot-application/target/
-spring-boot-application/out/
+spring-notification-server/*.iml
+spring-notification-server/.idea/
+spring-notification-server/target/
+spring-notification-server/out/
 
 ng4-application/node_modules/
 

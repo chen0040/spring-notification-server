@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-notification-server</artifactId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.1.RELEASE</version>
     </parent>
 
     <groupId>com.github.chen0040</groupId>
-    <artifactId>spring-boot-application</artifactId>
+    <artifactId>spring-notification-application</artifactId>
     <version>1.0.1</version>
 
 
@@ -316,7 +316,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>spring-boot-application</finalName>
+                            <finalName>spring-notification-application</finalName>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
