@@ -1,0 +1,15 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{title}}!
+  </h1>
+</div>
+<h2>Websocket message from spring-boot-application: </h2>
+<table *ngIf="messages">
+  <tr *ngFor="let message of messages">
+    <td>
+      {{message}}
+    </td>
+  </tr>
+</table>
+

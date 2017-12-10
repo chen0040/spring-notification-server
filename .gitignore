@@ -12,6 +12,8 @@ spring-boot-application/.idea/
 spring-boot-application/target/
 spring-boot-application/out/
 
+ng4-application/node_modules/
+
 *.iml
 .idea/
 
