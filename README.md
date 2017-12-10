@@ -63,7 +63,7 @@ To run the angular application that communicate with the spring-notification-ser
 
 
 ```bash 
-cd spring-websocket-angular-4-demo
+cd ng4-application
 npm install
 ng serve
 ```
