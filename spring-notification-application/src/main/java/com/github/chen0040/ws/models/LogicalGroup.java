@@ -16,4 +16,14 @@ public class LogicalGroup {
     private String note = "";
     private List<String> instances = new ArrayList<>();
     private long activeDateTime;
+    private String error;
+
+    public static LogicalGroup createAlert(String error) {
+        return new LogicalGroup().alert(error);
+    }
+
+    public LogicalGroup alert(String error) {
+        this.error = error;
+        return this;
+    }
 }

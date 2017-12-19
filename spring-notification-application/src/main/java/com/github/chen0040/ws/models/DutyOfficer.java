@@ -18,6 +18,14 @@ public class DutyOfficer {
     private String firstName = "";
     private String lastName = "";
     private long activeDateTime = 0L;
+    private String error;
 
+    public static DutyOfficer createAlert(String error) {
+        return new DutyOfficer().alert(error);
+    }
 
+    public DutyOfficer alert(String error) {
+        this.error = error;
+        return this;
+    }
 }

@@ -5,10 +5,7 @@ import com.github.chen0040.ws.consts.DutyShiftRepeatPattern;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -21,11 +18,12 @@ public class DutyShift {
     private long activeDateTime = 0L;
     private int repeatPattern = DutyShiftRepeatPattern.SameDaysOfEveryWeek;
 
-    private Set<String> logicalGroupsInScope = new HashSet<>();
-    private Set<String> dutyOfficersInScope = new HashSet<>();
+    private List<Long> logicalGroupsInScope = new ArrayList<>();
+    private List<Long> dutyOfficersInScope = new ArrayList<>();
 
     private String note = "";
 
+    private String error;
 
     public boolean isServicingLogicalGroup(String groupId){
         return logicalGroupsInScope.contains(groupId);
@@ -112,5 +110,14 @@ public class DutyShift {
         }
 
         return false;
+    }
+
+    public static DutyShift createAlert(String error) {
+        return new DutyShift().alert(error);
+    }
+
+    public DutyShift alert(String error) {
+        this.error = error;
+        return this;
     }
 }

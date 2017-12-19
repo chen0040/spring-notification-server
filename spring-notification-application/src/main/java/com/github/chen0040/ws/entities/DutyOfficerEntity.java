@@ -1,5 +1,6 @@
 package com.github.chen0040.ws.entities;
 
+import com.github.chen0040.ws.models.DutyOfficer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,35 @@ public class DutyOfficerEntity {
     private String firstName = "";
     private String lastName = "";
     private long activeDateTime = 0L;
+
+    public DutyOfficer toDutyOfficer(){
+        DutyOfficer result = new DutyOfficer();
+        result.setId(id);
+        result.setMobile(mobile);
+        result.setChatParameters(chatParameters);
+        result.setChatService(chatService);
+        result.setFallbackAlertUser(fallbackAlertUser);
+        result.setNote(note);
+        result.setTitle(title);
+        result.setFirstName(firstName);
+        result.setLastName(lastName);
+        result.setActiveDateTime(activeDateTime);
+        return result;
+    }
+
+    public void copy(DutyOfficer that){
+        id = that.getId();
+        mobile = that.getMobile();
+        chatParameters = that.getChatParameters();
+        chatService = that.getChatService();
+        fallbackAlertUser = that.getFallbackAlertUser();
+        note = that.getNote();
+        title = that.getTitle();
+        firstName = that.getFirstName();
+        lastName = that.getLastName();
+        activeDateTime = that.getActiveDateTime();
+
+    }
 
 
 }

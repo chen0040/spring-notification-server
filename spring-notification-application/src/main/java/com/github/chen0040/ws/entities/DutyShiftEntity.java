@@ -2,16 +2,15 @@ package com.github.chen0040.ws.entities;
 
 
 import com.github.chen0040.ws.consts.DutyShiftRepeatPattern;
+import com.github.chen0040.ws.models.DutyShift;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -29,96 +28,39 @@ public class DutyShiftEntity {
     private long activeDateTime = 0L;
     private int repeatPattern = DutyShiftRepeatPattern.SameDaysOfEveryWeek;
 
-    private Set<String> logicalGroupsInScope = new HashSet<>();
-    private Set<String> dutyOfficersInScope = new HashSet<>();
+    @ElementCollection
+    private List<Long> logicalGroupsInScope = new ArrayList<>();
+    @ElementCollection
+    private List<Long> dutyOfficersInScope = new ArrayList<>();
 
     private String note = "";
 
+    public DutyShift toDutyShift() {
+        DutyShift result = new DutyShift();
+        result.setId(id);
+        result.setStartTime(startTime);
+        result.setEndTime(endTime);
+        result.setRepeatCount(repeatCount);
+        result.setActiveDateTime(activeDateTime);
+        result.setRepeatPattern(repeatPattern);
+        result.setLogicalGroupsInScope(logicalGroupsInScope);
+        result.setDutyOfficersInScope(dutyOfficersInScope);
 
-    public boolean isServicingLogicalGroup(String groupId){
-        return logicalGroupsInScope.contains(groupId);
+        return result;
     }
 
-    public boolean inSchedule(long timestamp) {
-
-        if(repeatCount == 0){
-            return false;
-        }
-
-        if(repeatCount == 1){
-            return timestamp >= startTime && timestamp <= endTime;
-        }
-
-        Date date = new Date(timestamp);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-
-        Date startDate = new Date(startTime);
-        calendar.setTime(startDate);
-        int startHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int startMinute = calendar.get(Calendar.MINUTE);
-        int startDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        int startDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int startDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-
-        Date endDate = new Date(endTime);
-        calendar.setTime(endDate);
-        int endHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int endMinute = calendar.get(Calendar.MINUTE);
-        int endDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        int endDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        int endDayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-
-
-        if(repeatPattern == DutyShiftRepeatPattern.SameTimeIntervalOfEveryHour){
-            if(endMinute < startMinute){
-                return !(minute >= endMinute && minute <= startMinute);
-            } else {
-                return minute >= startMinute && minute <= endMinute;
-            }
-        } else if(repeatPattern == DutyShiftRepeatPattern.SameTimeIntervalOfEveryDay){
-            int startMinuteTotal = startHour * 60 + startMinute;
-            int endMinuteTotal = endHour * 60 + endMinute;
-            int minuteTotal = hour * 60 + minute;
-            if(endMinuteTotal < startMinuteTotal){
-                return !(minuteTotal >= endMinuteTotal && minuteTotal <= startMinuteTotal);
-            } else {
-                return minuteTotal >= startMinuteTotal && minuteTotal <= endMinuteTotal;
-            }
-        } else if(repeatPattern == DutyShiftRepeatPattern.SameDaysOfEveryWeek){
-            int startMinuteTotal = (startDayOfWeek * 24 + startHour) * 60 + startMinute;
-            int endMinuteTotal = (endDayOfWeek * 24 + endHour) * 60 + endMinute;
-            int minuteTotal = (dayOfWeek * 24 + hour) * 60 + minute;
-            if(endMinuteTotal < startMinuteTotal){
-                return !(minuteTotal >= endMinuteTotal && minuteTotal <= startMinuteTotal);
-            } else {
-                return minuteTotal >= startMinuteTotal && minuteTotal <= endMinuteTotal;
-            }
-        } else if(repeatPattern == DutyShiftRepeatPattern.SameDaysOfEveryMonth) {
-            int startMinuteTotal = (startDayOfMonth * 24 + startHour) * 60 + startMinute;
-            int endMinuteTotal = (endDayOfMonth * 24 + endHour) * 60 + endMinute;
-            int minuteTotal = (dayOfMonth * 24 + hour) * 60 + minute;
-            if(endMinuteTotal < startMinuteTotal){
-                return !(minuteTotal >= endMinuteTotal && minuteTotal <= startMinuteTotal);
-            } else {
-                return minuteTotal >= startMinuteTotal && minuteTotal <= endMinuteTotal;
-            }
-        } else if(repeatPattern == DutyShiftRepeatPattern.SameDaysOfEveryYear) {
-            int startMinuteTotal = (startDayOfYear * 24 + startHour) * 60 + startMinute;
-            int endMinuteTotal = (endDayOfYear * 24 + endHour) * 60 + endMinute;
-            int minuteTotal = (dayOfYear * 24 + hour) * 60 + minute;
-            if(endMinuteTotal < startMinuteTotal){
-                return !(minuteTotal >= endMinuteTotal && minuteTotal <= startMinuteTotal);
-            } else {
-                return minuteTotal >= startMinuteTotal && minuteTotal <= endMinuteTotal;
-            }
-        }
-
-        return false;
+    public void copy(DutyShift that){
+        id = that.getId();
+        startTime = that.getStartTime();
+        endTime = that.getEndTime();
+        repeatCount = that.getRepeatCount();
+        activeDateTime = that.getActiveDateTime();
+        repeatPattern = that.getRepeatPattern();
+        logicalGroupsInScope = that.getLogicalGroupsInScope();
+        dutyOfficersInScope = that.getDutyOfficersInScope();
     }
+
+
+
+
 }
