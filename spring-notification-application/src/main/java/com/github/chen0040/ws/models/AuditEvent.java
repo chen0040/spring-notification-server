@@ -4,9 +4,7 @@ package com.github.chen0040.ws.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -21,7 +19,10 @@ public class AuditEvent {
    private String category;
    private long count;
    private String level = "info";
-   private Map<String, String> impacts = new HashMap<> ();
+
+   private List<DutyOfficer> dutyOfficers = new ArrayList<>();
+   private List<DutyShift> shifts = new ArrayList<>();
+   private List<LogicalGroup> groups = new ArrayList<>();
 
    public AuditEvent(){
 

@@ -25,38 +25,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private DutyOfficerService dutyOfficerService;
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
-    private Map<Long, String> getServiceNames(List<LogicalGroup> groups) {
-        Map<Long, String> result = new HashMap<>();
-        for (LogicalGroup group : groups) {
-            result.put(group.getId(), group.getGroupName());
-        }
-        return result;
-    }
-
-
-    private List<Long> getShiftIds(List<DutyShift> affectedShifts) {
-        Set<Long> result = new HashSet<>();
-        for (DutyShift shift : affectedShifts) {
-            result.add(shift.getId());
-        }
-        return new ArrayList<>(result);
-    }
-
-
-
-    private List<Long> getLogicalGroupIds(List<LogicalGroup> affectedGroups) {
-        Set<Long> results = new HashSet<>();
-
-        for (LogicalGroup group : affectedGroups) {
-            results.add(group.getId());
-        }
-
-        return new ArrayList<>(results);
-
-    }
 
 
     private List<DutyOfficer> getDutyOfficersFromIds(List<DutyOfficer> officers, Set<Long> affectedDutyOfficerIds) {
@@ -124,17 +92,13 @@ public class NotificationServiceImpl implements NotificationService {
         final List<DutyOfficer> officers = dutyOfficerService.findAll();
 
         final List<LogicalGroup> affectedGroups = getAffectedServices(groups, alarm);
-        final Map<Long, String> affectedGroupNames = getServiceNames(affectedGroups);
         final List<DutyShift> affectedShifts = getAffectedShifts(shifts, affectedGroups, alarm);
         final Set<Long> affectedDutyOfficerIds = getAffectedDutyOfficerIds(affectedShifts);
-        final List<Long> affectedShiftIds = getShiftIds(affectedShifts);
         final List<DutyOfficer> affectedDutyOfficers = getDutyOfficersFromIds(officers, affectedDutyOfficerIds);
 
-        alarm.getImpacts().put("+(DATE) spark stream processing time", dateFormat.format(new Date()));
-
-        alarm.getImpacts().put("+(JSON) duty officers to notify", JSON.toJSONString(affectedDutyOfficers, SerializerFeature.BrowserCompatible));
-        alarm.getImpacts().put("+(JSON) services impacted", JSON.toJSONString(affectedGroupNames, SerializerFeature.BrowserCompatible));
-        alarm.getImpacts().put("+(ID) shifts to notify", JSON.toJSONString(affectedShiftIds, SerializerFeature.BrowserCompatible));
+        alarm.setDutyOfficers(affectedDutyOfficers);
+        alarm.setGroups(affectedGroups);
+        alarm.setShifts(affectedShifts);
 
         return alarm;
     }
