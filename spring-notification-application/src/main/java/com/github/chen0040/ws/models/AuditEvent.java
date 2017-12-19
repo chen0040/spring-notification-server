@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -19,6 +21,7 @@ public class AuditEvent {
    private String category;
    private long count;
    private String level = "info";
+   private Map<String, String> impacts = new HashMap<> ();
 
    public AuditEvent(){
 
