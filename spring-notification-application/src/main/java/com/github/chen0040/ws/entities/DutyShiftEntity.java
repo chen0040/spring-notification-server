@@ -1,10 +1,13 @@
-package com.github.chen0040.ws.models;
+package com.github.chen0040.ws.entities;
 
 
 import com.github.chen0040.ws.consts.DutyShiftRepeatPattern;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,8 +16,13 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class DutyShift {
+@Entity
+public class DutyShiftEntity {
+
+    @Id
+    @GeneratedValue
     private long id;
+
     private long startTime = 0L;
     private long endTime = 0L;
     private int repeatCount = -1;
